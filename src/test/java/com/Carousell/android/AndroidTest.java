@@ -19,7 +19,7 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 
 import com.Carousell.util.Log;
 public class AndroidTest{
- 
+
 	public static AppiumDriver driver;
 	public static WebDriver webdriver;
 	public static Process appium;
