@@ -53,9 +53,22 @@ public abstract class ProductPage {
 		}
 	}
 
+	public static String printProductTitle(AppiumDriver driver)
+	{
+		return driver.findElementById("com.thecarousell.Carousell:id/text_product_title").getText();
+	}
+
+	public static boolean inProductPage(AppiumDriver driver)
+	{
+		if (ElementOP.isElementPresent(driver, MobileBy.id("com.thecarousell.Carousell:id/text_product_title"), 2))
+			return true;
+		else
+			return false;
+	}
+
 	/** Verify the product page has loaded **/
 	public static void loaded(AppiumDriver driver) {
-		if (!ElementOP.isElementPresent(driver, MobileBy.id("com.thecarousell.Carousell:id/text_product_title"), 2)) {
+		if (!inProductPage(driver)) {
 				Log.infoTitle("--->Not in product page. Please check!");
 				GeneralOP.takeScreenShot(driver);
 				//Log.info(e.getMessage());

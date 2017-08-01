@@ -5,7 +5,6 @@ import org.testng.annotations.Test;
 import org.testng.annotations.BeforeSuite;
 
 import io.appium.java_client.AppiumDriver;
-import io.appium.java_client.MobileBy;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.remote.AndroidMobileCapabilityType;
 
@@ -23,6 +22,7 @@ import com.Carousell.android.page.HomePage;
 import com.Carousell.android.page.LandingPage;
 import com.Carousell.android.page.OfferPage;
 import com.Carousell.android.page.CategoryPage;
+import com.Carousell.android.page.ChatPage;
 import com.Carousell.android.page.ProductPage;
 import com.Carousell.util.Log;
 
@@ -127,13 +127,13 @@ public class AndroidTest{
 		Log.infoTitle("Choose the first listing Starts");
 		CategoryPage.choose1st(driver, "Cars");
 
-		if (!ElementOP.isElementPresent(driver, MobileBy.id("com.thecarousell.Carousell:id/text_product_title"), 2)) {
+		if (!ProductPage.inProductPage(driver)) {
 			Log.info("--->Choose the first listing Fails. Please check!");
 			GeneralOP.takeScreenShot(driver);
 			throw new AssertionError("--->Choose the first listing Fails.");
 		}
 		else {
-			Log.info("first listing is " + driver.findElementById("com.thecarousell.Carousell:id/text_product_title").getText());
+			Log.info("first listing is " + ProductPage.printProductTitle(driver));
 			Log.infoTitle("Choose the first listing  --Pass");
 		}
 
@@ -144,17 +144,19 @@ public class AndroidTest{
 	public static void makeAnOffer() throws Exception {
 		Log.infoTitle("Make an offer Starts");
 		ProductPage.buyNow(driver);
-		OfferPage.makeOffer(driver, andauto.getProperty("amount"));
 
-		if (!ElementOP.isElementPresent(driver, MobileBy.xpath("//android.widget.TextView[@text='MADE AN OFFER\nNT$" + andauto.getProperty("amount") + "']"),2)) {
+		String amount = andauto.getProperty("amount");
+		OfferPage.makeOffer(driver, amount);
+
+		if (!ChatPage.checkOfferResult(driver, amount)) {
 			Log.info("--->Not into result page. Please check");
 			GeneralOP.takeScreenShot(driver);
 			throw new AssertionError("--->Not into result page.");
 		}
 		else {
-			Log.info("make and offer on " + driver.findElementById("com.thecarousell.Carousell:id/text_product_name").getText());
+			Log.info("make and offer on " + ChatPage.printProductTitle(driver));
 			Log.infoTitle("Make an offer  --Pass");
-			driver.findElementById("com.thecarousell.Carousell:id/button_guide_close").click();
+			ChatPage.closeGuide(driver);
 			//Go back
 			driver.navigate().back();
 			driver.navigate().back();
